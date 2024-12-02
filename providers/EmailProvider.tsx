@@ -1,123 +1,57 @@
-// app/providers/EmailProvider.tsx
-"use client";
-import React, { createContext, useContext, useState, useEffect } from "react";
+// providers/EmailProvider.tsx
+'use client'
+import React, { createContext, useState, useEffect } from "react";
 
 type Email = {
   id: string;
-  from: {
-    name: string;
-    email: string;
-  };
+  from: { name: string; email: string };
   subject: string;
   short_description: string;
-  date: number;
+  date: string;
+  isFavorite: boolean;
+  isRead: boolean;
 };
 
 type EmailContextType = {
   emails: Email[];
-  currentPageEmails: Email[];
-  nextPage: () => void;
-  prevPage: () => void;
-  currentPage: number;
-  totalPages: number;
-  isLoading: boolean;
+  toggleFavorite: (id: string) => void;
+  markAsRead: (id: string) => void;
 };
 
-const EmailContext = createContext<EmailContextType | undefined>(undefined);
+export const EmailContext = createContext<EmailContextType>({
+  emails: [],
+  toggleFavorite: () => {},
+  markAsRead: () => {},
+});
 
-export function EmailProvider({ children }: { children: React.ReactNode }) {
+export const EmailProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [emails, setEmails] = useState<Email[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const itemsPerPage = 10;
 
   useEffect(() => {
-    async function fetchEmails() {
-      try {
-        setIsLoading(true);
-        const response = await fetch("https://flipkart-email-mock.now.sh/");
-        
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        
-        const data = await response.json();
-        
-        // Debug logging
-        console.log("Raw API Response:", data);
-
-        // Validate and transform data if necessary
-        if (Array.isArray(data)) {
-          const transformedEmails: Email[] = data.map(email => ({
-            id: email.id || crypto.randomUUID(),
-            from: {
-              name: email.from?.name || 'Unknown Sender',
-              email: email.from?.email || 'unknown@example.com'
-            },
-            subject: email.subject || 'No Subject',
-            short_description: email.short_description || 'No description',
-            date: email.date || Date.now()
-          }));
-
-          setEmails(transformedEmails);
-          console.log("Transformed Emails:", transformedEmails);
-        } else {
-          console.error('Fetched data is not an array:', data);
-          setEmails([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch emails:", error);
-        setEmails([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchEmails();
+    // Fetch emails from API
+    fetch("https://flipkart-email-mock.vercel.app/")
+      .then((res) => res.json())
+      .then((data) => setEmails(data.list))
+      .catch((err) => console.error(err));
   }, []);
 
-  const totalPages = Math.ceil(emails.length / itemsPerPage);
-  
-  const currentPageEmails = emails.length > 0 
-    ? emails.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+  const toggleFavorite = (id: string) => {
+    setEmails((prevEmails) =>
+      prevEmails.map((email) =>
+        email.id === id ? { ...email, isFavorite: !email.isFavorite } : email
       )
-    : [];
-
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
+    );
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
+  const markAsRead = (id: string) => {
+    setEmails((prevEmails) =>
+      prevEmails.map((email) => (email.id === id ? { ...email, isRead: true } : email))
+    );
   };
 
   return (
-    <EmailContext.Provider
-      value={{
-        emails,
-        currentPageEmails,
-        nextPage,
-        prevPage,
-        currentPage,
-        totalPages,
-        isLoading,
-      }}
-    >
+    <EmailContext.Provider value={{ emails, toggleFavorite, markAsRead }}>
       {children}
     </EmailContext.Provider>
   );
-}
-
-export function useEmail() {
-  const context = useContext(EmailContext);
-  if (!context) {
-    throw new Error("useEmail must be used within an EmailProvider");
-  }
-  return context;
-}
+};

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EmailProvider } from "../providers/EmailProvider";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -20,10 +21,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  
   return (
+    <EmailProvider >
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -31,5 +34,6 @@ export default function RootLayout({
         {children}
       </body>
     </html>
+    </EmailProvider>
   );
 }

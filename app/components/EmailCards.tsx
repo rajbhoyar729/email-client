@@ -1,3 +1,4 @@
+// components/EmailCard.tsx
 import React from "react";
 
 type EmailCardProps = {
@@ -5,7 +6,7 @@ type EmailCardProps = {
   from: { name: string; email: string };
   subject: string;
   short_description: string;
-  date: string;
+  date: string; // date string from API
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
   isRead: boolean;
@@ -24,38 +25,48 @@ export const EmailCard: React.FC<EmailCardProps> = ({
   const name = from.name;
   const initial = name.charAt(0).toUpperCase();
 
+  // Format the date into a readable string
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
   return (
     <div
-      className={`flex justify-between items-start p-4 border rounded-lg transition-shadow duration-200 hover:shadow-lg ${
-        isRead ? "bg-[#F2F2F2]" : "bg-white"
-      } border-[#CFD2DC]`}
+      className={`flex justify-between items-start p-4 my-4 border rounded-lg shadow-sm ${
+        isRead ? "bg-[#F8F9FC]" : "bg-white"
+      } border-[#D3D4DD]`}
     >
-      <div className="flex gap-4">
-        <div className="w-12 h-12 bg-[#E54065] text-white rounded-full flex justify-center items-center text-xl font-bold shadow-md">
+      <div className="flex gap-4 w-full">
+        {/* Initial Badge */}
+        <div className="w-12 h-12 bg-[#E54065] text-white rounded-full flex justify-center items-center text-lg font-bold">
           {initial}
         </div>
-        <div>
-          <h4 className="text-[#636363] font-semibold">
-            {from.name}{" "}
-            <span className="text-[#E54065] font-normal text-sm">
-              ({from.email})
+        {/* Email Info */}
+        <div className="w-full">
+          <h4 className="text-[#3C4048] font-semibold">
+            From: {from.name}{" "}
+            <span className="text-[#E54065] font-normal">
+              {"<"}
+              {from.email}
+              {">"}
             </span>
           </h4>
-          <p className="text-sm text-[#636363] font-medium mt-1">
-            Subject: {subject}
-          </p>
-          <p className="text-sm text-[#9B9B9B] mt-1">{short_description}</p>
-          <p className="text-xs text-[#B1B1B1] mt-2">{date}</p>
+          <p className="text-[#636363] font-medium">Subject: {subject}</p>
+          <p className="text-[#636363] text-sm truncate">{short_description}</p>
+          {/* Display formatted date */}
+          <div className=" flex ">
+          <p className="text-[#9A9A9A] text-sm mt-2">{formattedDate}</p>
+          {/* Favorite Label */}
+          {isFavorite && (
+            <span className="text-[#E54065] font-medium text-sm bg-[#FCE3E9] px-2 py-1 rounded-md inline-block mt-2">
+              Favorite
+            </span>
+          )}
+          </div>
         </div>
       </div>
-      <button
-        className={`text-lg font-medium transition ${
-          isFavorite ? "text-[#E54065]" : "text-[#636363]"
-        }`}
-        onClick={() => onToggleFavorite(id)}
-      >
-        {isFavorite ? "★" : "☆"}
-      </button>
     </div>
   );
 };

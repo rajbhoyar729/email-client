@@ -1,11 +1,12 @@
 import React from "react";
+import { format } from "date-fns";
 
 type EmailCardProps = {
   id: string;
   from: { name: string; email: string };
   subject: string;
   short_description: string;
-  date: string;
+  date: string; // Original date string
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
   isRead: boolean;
@@ -23,6 +24,8 @@ export const EmailCard: React.FC<EmailCardProps> = ({
 }) => {
   const name = from.name;
   const initial = name.charAt(0).toUpperCase();
+
+  const formattedDate = format(new Date(date), "dd/MM/yyyy hh:mm a");
 
   return (
     <div
@@ -45,7 +48,7 @@ export const EmailCard: React.FC<EmailCardProps> = ({
             Subject: {subject}
           </p>
           <p className="text-sm text-[#9B9B9B] mt-1">{short_description}</p>
-          <p className="text-xs text-[#B1B1B1] mt-2">{date}</p>
+          <p className="text-xs text-[#B1B1B1] mt-2">{formattedDate}</p>
         </div>
       </div>
       <button

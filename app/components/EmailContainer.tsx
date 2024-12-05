@@ -144,7 +144,7 @@ export const EmailContainer: React.FC = () => {
             </div>
             <div className="flex justify-center items-center">
               <button
-                className="mt-4 px-4 py-2 items-end bg-[#E54065] text-white rounded-full text-sm font-medium"
+                className="mt-4 px-4 py-2 items-end bg-[#E54065] text-white rounded-md text-sm font-medium"
                 onClick={() => handleToggleFavorite(selectedEmailId)}
               >
                 {favoriteEmails.includes(selectedEmailId)

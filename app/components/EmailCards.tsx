@@ -38,13 +38,13 @@ export const EmailCard: React.FC<EmailCardProps> = ({
         isRead ? "bg-[#F8F9FC]" : "bg-white"
       } border-[#D3D4DD]`}
     >
-      <div className="flex gap-4 w-full">
+      <div className="flex flex-shrink gap-4 w-full">
         {/* Initial Badge */}
-        <div className="w-12 h-12 bg-[#E54065] text-white rounded-full flex justify-center items-center text-lg font-bold">
+        <div className="w-[40px] h-[40px] bg-[#E54065] text-white rounded-full grid flex-shrink justify-center items-center text-base font-bold">
           {initial}
         </div>
         {/* Email Info */}
-        <div className="w-full">
+        <div className="  w-full">
           <h4 className="text-[#3C4048] font-semibold">
             From: {from.name}{" "}
             <span className="text-[#E54065] font-normal">

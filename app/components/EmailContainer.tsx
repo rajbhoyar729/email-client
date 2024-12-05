@@ -3,6 +3,7 @@
 import React, { useContext, useState } from "react";
 import { EmailContext } from "../../providers/EmailProvider";
 import { EmailCard } from "../components/EmailCards";
+import {format} from "date-fns/format";
 
 export const EmailContainer: React.FC = () => {
   const { emails, toggleFavorite } = useContext(EmailContext);
@@ -128,6 +129,7 @@ export const EmailContainer: React.FC = () => {
       {/* Slave Section */}
       {selectedEmailId && selectedEmail && (
         <div className="w-full lg:w-2/3 p-6">
+<<<<<<< HEAD
           <div className="grid grid-flow-col">
             <div className="flex items-center gap-4 mb-4">
               {/* Avatar */}
@@ -164,6 +166,63 @@ export const EmailContainer: React.FC = () => {
               />
             </div>
           )}
+=======
+          <div className="bg-white border border-[#CFD2DC] rounded-lg shadow-md p-6">
+          
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center gap-4">
+                
+                <div className="w-12 h-12 flex items-center justify-center bg-[#E54065] text-white rounded-full text-lg font-semibold">
+                  {
+                  
+                    emails.find((email) => email.id === selectedEmailId)?.from?.name?.charAt(0).toUpperCase() || "?"
+                  }
+                </div>
+                
+                <div>
+                  <h2 className="text-[#292929] text-lg font-bold">
+                    {emails.find((email) => email.id === selectedEmailId)?.subject || "No Subject"}
+                  </h2>
+                  <p className="text-[#636363] text-sm">
+                    {format(
+                      new Date(
+                        emails.find((email) => email.id === selectedEmailId)?.date || new Date()
+                      ),
+                      "dd/MM/yyyy hh:mm a"
+                    )}
+                  </p>
+                </div>
+              </div>
+              {/* Favorite Button */}
+              <button
+                className={`px-4 py-2 rounded-full text-sm font-medium shadow ${
+                  emails.find((email) => email.id === selectedEmailId)?.isFavorite
+                    ? "bg-[#E54065] text-white"
+                    : "bg-[#E1E4EA] text-[#636363]"
+                }`}
+                onClick={() => toggleFavorite(selectedEmailId)}
+              >
+                {emails.find((email) => email.id === selectedEmailId)?.isFavorite
+                  ? "Mark as favorite"
+                  : "Mark as favorite"}
+              </button>
+            </div>
+            {/* Email Body */}
+            {isLoading ? (
+              <p className="text-[#636363] text-center">Loading...</p>
+            ) : (
+              <div>
+                <h3 className="text-[#292929] text-lg font-bold mb-2">
+                  {emails.find((email) => email.id === selectedEmailId)?.subject || "No Subject"}
+                </h3>
+                <div
+                  className="leading-relaxed text-[#292929]"
+                  dangerouslySetInnerHTML={{ __html: selectedEmailBody || "" }}
+                />
+              </div>
+            )}
+          </div>
+>>>>>>> d83f14c959ba071925c0bfc9b84bc92f9ca9b4fb
         </div>
       )}
     </div>

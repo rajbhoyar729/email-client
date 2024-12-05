@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.15",
+=======
+    "date-fns": "^4.1.0",
+>>>>>>> d83f14c959ba071925c0bfc9b84bc92f9ca9b4fb
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",

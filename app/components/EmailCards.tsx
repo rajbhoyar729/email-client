@@ -1,12 +1,17 @@
 // components/EmailCard.tsx
 import React from "react";
+import { format } from "date-fns";
 
 type EmailCardProps = {
   id: string;
   from: { name: string; email: string };
   subject: string;
   short_description: string;
+<<<<<<< HEAD
   date: string; // date string from API
+=======
+  date: string; // Original date string
+>>>>>>> d83f14c959ba071925c0bfc9b84bc92f9ca9b4fb
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
   isRead: boolean;
@@ -25,12 +30,16 @@ export const EmailCard: React.FC<EmailCardProps> = ({
   const name = from.name;
   const initial = name.charAt(0).toUpperCase();
 
+<<<<<<< HEAD
   // Format the date into a readable string
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
+=======
+  const formattedDate = format(new Date(date), "dd/MM/yyyy hh:mm a");
+>>>>>>> d83f14c959ba071925c0bfc9b84bc92f9ca9b4fb
 
   return (
     <div
@@ -53,6 +62,7 @@ export const EmailCard: React.FC<EmailCardProps> = ({
               {">"}
             </span>
           </h4>
+<<<<<<< HEAD
           <p className="text-[#636363] font-medium">Subject: {subject}</p>
           <p className="text-[#636363] text-sm truncate">{short_description}</p>
           {/* Display formatted date */}
@@ -65,6 +75,13 @@ export const EmailCard: React.FC<EmailCardProps> = ({
             </span>
           )}
           </div>
+=======
+          <p className="text-sm text-[#636363] font-medium mt-1">
+            Subject: {subject}
+          </p>
+          <p className="text-sm text-[#9B9B9B] mt-1">{short_description}</p>
+          <p className="text-xs text-[#B1B1B1] mt-2">{formattedDate}</p>
+>>>>>>> d83f14c959ba071925c0bfc9b84bc92f9ca9b4fb
         </div>
       </div>
     </div>
